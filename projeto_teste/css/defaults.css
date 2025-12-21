@@ -662,3 +662,16 @@ ar-button > a:hover {
 .d-none-plywood{
   display:none;
 }
+
+.navbar-images img {
+    height: 80px;           /* altura das imagens, ajusta ao teu gosto */
+    max-height: 100px;      /* limita se forem grandes demais */
+    object-fit: contain;    /* ajusta proporcionalmente sem distorcer */
+}
+.header {
+    position: relative;     /* necessário para sobrepor as imagens */
+}
+.headerImage {
+    width: 100%;
+    height: auto;
+}
