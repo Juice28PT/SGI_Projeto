@@ -675,3 +675,10 @@ ar-button > a:hover {
     width: 100%;
     height: auto;
 }
+
+
+  /* Diminuir um pouco a imagem e centralizar */
+  .custom-carousel-size {
+    max-width: 55%;  /* ajusta para o tamanho que quiseres */
+    margin: 0 auto;  /* centraliza horizontalmente */
+  }
