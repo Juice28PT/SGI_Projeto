@@ -76,6 +76,10 @@ new GLTFLoader().load(
         console.log("=== RELATÓRIO DO MODELO ===");
         console.log("Animações encontradas no ficheiro:", gltf.animations);
 
+        gltf.animations.forEach((clip, index) => {
+        console.log(`Animação #${index}: "${clip.name}"`);
+    });
+
         // Ativar sombras em todas as malhas do modelo carregado para que projetem e recebam sombras
         gltf.scene.traverse((obj) => {
             if (obj.isMesh) {
@@ -114,20 +118,38 @@ new GLTFLoader().load(
 
         if (discClip) {
             DiscRotation = mixer.clipAction(discClip);
-            DiscRotation.loop = THREE.LoopRepeat;
-            DiscRotation.play();
-        }
+            DiscRotation.loop = THREE.LoopOnce;
+            //DiscRotation.play();
+            DiscRotation.clampWhenFinished = true;
+            console.log("✅ Animação do Disco carregada com sucesso.");
+        } else {
+        console.error("❌ ERRO: Não encontrei 'DiscAction'. Vê os nomes na lista acima!");
+    }
         
-        /* if (armClip) {
+        if (armClip) {
             ArmAction = mixer.clipAction(armClip);
             ArmAction.loop = THREE.LoopOnce;
             ArmAction.clampWhenFinished = true;
-        } */
+            console.log("✅ Animação do Braço carregada com sucesso.");
+        } else {
+        // TENTATIVA DE SALVAÇÃO: Se não encontrar 'ArmAction', tenta apanhar a segunda animação da lista
+        if (clips.length > 1) {
+            console.warn("⚠️ Aviso: Não encontrei 'ArmAction', vou tentar usar a segunda animação da lista.");
+            ArmAction = mixer.clipAction(clips[1]); // Assume que a segunda é a do braço
+            ArmAction.loop = THREE.LoopOnce;
+            ArmAction.clampWhenFinished = true;
+        } else {
+            console.error("❌ ERRO CRÍTICO: Não encontrei a animação do braço nem pelo nome, nem por posição.");
+        }
+    }
 
         if (coverClip) {
             CoverAction = mixer.clipAction(coverClip);
             CoverAction.loop = THREE.LoopOnce;
             CoverAction.clampWhenFinished = true;
+            console.log("✅ Animação da Cover carregada com sucesso.");
+        } else {
+            console.error("❌ ERRO CRÍTICO: Não encontrei a animação da Cover nem pelo nome, nem por posição.");
         }
 
         
@@ -184,6 +206,31 @@ new GLTFLoader().load(
     }
 }
 
+const discButton = document.getElementById('disc-btn');
+
+if (discButton) {
+            discButton.addEventListener('click', () => {
+                
+                if (DiscRotation) {
+
+                    if (DiscRotation.isRunning()) {
+                        DiscRotation.stop();
+                    }
+
+                    DiscRotation.reset();
+
+                    DiscRotation.timeScale = 1;
+
+                    DiscRotation.play();
+
+                    console.log("A tocar a animação do disco!");
+
+                } else {
+                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
+                }
+            })
+        }
+
 const armButton = document.getElementById('arm-btn');
 
 if (armButton) {
@@ -202,6 +249,31 @@ if (armButton) {
                     ArmAction.play();
 
                     console.log("A tocar a animação do braço!");
+
+                } else {
+                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
+                }
+            })
+        }
+
+const coverButton = document.getElementById('cover-btn');
+
+if (coverButton) {
+            coverButton.addEventListener('click', () => {
+                
+                if (CoverAction) {
+
+                    if (CoverAction.isRunning()) {
+                        CoverAction.stop();
+                    }
+
+                    CoverAction.reset();
+
+                    CoverAction.timeScale = 1;
+
+                    CoverAction.play();
+
+                    console.log("A tocar a animação da Cover!");
 
                 } else {
                     console.warn("Atenção: O modelo ou a animção ainda não carregam!");
