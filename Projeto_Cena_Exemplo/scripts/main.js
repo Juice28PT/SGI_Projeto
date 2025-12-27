@@ -5,6 +5,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 // Criar cena do threeJS
 let cena = new THREE.Scene()
 window.cena = cena
+let mixer;
+let DiscRotation;
+let ArmAction;
+let CoverAction;
+const clock = new THREE.Clock();
 
 // Criar Renderer
 const threeCanvas = document.getElementById('three-canvas');
@@ -182,6 +187,7 @@ new GLTFLoader().load(
     let latencia_minima = 1 / 60; // para 60 frames por segundo 
     animar()
     function animar() {
+        if (mixer) mixer.update(clock.getDelta());
         requestAnimationFrame(animar);
         delta += relogio.getDelta();
 
