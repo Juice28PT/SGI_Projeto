@@ -5,6 +5,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 // Criar cena do threeJS
 let cena = new THREE.Scene()
 window.cena = cena
+let mixer;
+let DiscRotation;
+let ArmAction;
+let CoverAction;
+const clock = new THREE.Clock();
 
 // Criar Renderer
 const threeCanvas = document.getElementById('three-canvas');
@@ -68,6 +73,9 @@ new GLTFLoader().load(
         // Informação: 1 Unidade = 0.1m = 1 dm = 10 cm
         cena.add(gltf.scene)
 
+        console.log("=== RELATÓRIO DO MODELO ===");
+        console.log("Animações encontradas no ficheiro:", gltf.animations);
+
         // Ativar sombras em todas as malhas do modelo carregado para que projetem e recebam sombras
         gltf.scene.traverse((obj) => {
             if (obj.isMesh) {
@@ -95,6 +103,34 @@ new GLTFLoader().load(
                 }
             }
         })
+
+        mixer = new THREE.AnimationMixer(gltf.scene);
+
+        const clips = gltf.animations;
+
+        const discClip = THREE.AnimationClip.findByName(clips, 'DiscRotation');
+        const armClip = THREE.AnimationClip.findByName(clips, 'ArmAction');
+        const coverClip = THREE.AnimationClip.findByName(clips, 'CoverAction');
+
+        if (discClip) {
+            DiscRotation = mixer.clipAction(discClip);
+            DiscRotation.loop = THREE.LoopRepeat;
+            DiscRotation.play();
+        }
+        
+        /* if (armClip) {
+            ArmAction = mixer.clipAction(armClip);
+            ArmAction.loop = THREE.LoopOnce;
+            ArmAction.clampWhenFinished = true;
+        } */
+
+        if (coverClip) {
+            CoverAction = mixer.clipAction(coverClip);
+            CoverAction.loop = THREE.LoopOnce;
+            CoverAction.clampWhenFinished = true;
+        }
+
+        
 
         // Calcular o centro da caixa delimitadora do modelo e recentralizar os controlos/câmara
         try {
@@ -129,6 +165,7 @@ new GLTFLoader().load(
     let latencia_minima = 1 / 60; // para 60 frames por segundo 
     animar()
     function animar() {
+        if (mixer) mixer.update(clock.getDelta());
         requestAnimationFrame(animar);
         delta += relogio.getDelta();
 
@@ -146,3 +183,28 @@ new GLTFLoader().load(
         delta = delta % latencia_minima;
     }
 }
+
+const armButton = document.getElementById('arm-btn');
+
+if (armButton) {
+            armButton.addEventListener('click', () => {
+                
+                if (ArmAction) {
+
+                    if (ArmAction.isRunning()) {
+                        ArmAction.stop();
+                    }
+
+                    ArmAction.reset();
+
+                    ArmAction.timeScale = 1;
+
+                    ArmAction.play();
+
+                    console.log("A tocar a animação do braço!");
+
+                } else {
+                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
+                }
+            })
+        }
