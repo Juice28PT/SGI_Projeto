@@ -118,9 +118,8 @@ new GLTFLoader().load(
 
         if (discClip) {
             DiscRotation = mixer.clipAction(discClip);
-            DiscRotation.loop = THREE.LoopOnce;
-            //DiscRotation.play();
-            DiscRotation.clampWhenFinished = true;
+            DiscRotation.loop = THREE.LoopRepeat;
+            DiscRotation.play();
             console.log("✅ Animação do Disco carregada com sucesso.");
         } else {
         console.error("❌ ERRO: Não encontrei 'DiscAction'. Vê os nomes na lista acima!");
@@ -206,10 +205,10 @@ new GLTFLoader().load(
     }
 }
 
-const discButton = document.getElementById('disc-btn');
+const discButtonStart = document.getElementById('disc-start-btn');
 
-if (discButton) {
-            discButton.addEventListener('click', () => {
+if (discButtonStart) {
+            discButtonStart.addEventListener('click', () => {
                 
                 if (DiscRotation) {
 
@@ -223,7 +222,7 @@ if (discButton) {
 
                     DiscRotation.play();
 
-                    console.log("A tocar a animação do disco!");
+                    console.log("A tocar a animação do braço!");
 
                 } else {
                     console.warn("Atenção: O modelo ou a animção ainda não carregam!");
@@ -231,10 +230,33 @@ if (discButton) {
             })
         }
 
-const armButton = document.getElementById('arm-btn');
+const discButtonStop = document.getElementById('disc-stop-btn');
 
-if (armButton) {
-            armButton.addEventListener('click', () => {
+if (discButtonStop) {
+            discButtonStop.addEventListener('click', () => {
+                
+                if (DiscRotation) {
+
+                    if (DiscRotation.isRunning()) {
+                        DiscRotation.stop();
+                    }
+
+                    DiscRotation.reset();
+
+                    DiscRotation.timeScale = 1;
+
+                    console.log("A tocar a animação do braço!");
+
+                } else {
+                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
+                }
+            })
+        }
+
+const armButtonStart = document.getElementById('arm-start-btn');
+
+if (armButtonStart) {
+            armButtonStart.addEventListener('click', () => {
                 
                 if (ArmAction) {
 
@@ -256,10 +278,61 @@ if (armButton) {
             })
         }
 
-const coverButton = document.getElementById('cover-btn');
+const armButtonStop = document.getElementById('arm-stop-btn');
 
-if (coverButton) {
-            coverButton.addEventListener('click', () => {
+if (armButtonStop) {
+            armButtonStop.addEventListener('click', () => {
+                
+                if (ArmAction) {
+
+                    if (ArmAction.time === 0) {
+                        ArmAction.time = ArmAction.getClip().duration;
+                    }
+
+                    ArmAction.paused = false;
+                    ArmAction.timeScale = -1;
+                    ArmAction.play();
+                    ArmAction.setLoop(THREE.LoopOnce);
+                    ArmAction.clampWhenFinished = true;
+                    ArmAction.play();
+
+                    console.log("A tocar a animação do braço!");
+
+                } else {
+                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
+                }
+            })
+        }
+
+const coverButtonClose = document.getElementById('cover-close-btn');
+
+if (coverButtonClose) {
+            coverButtonClose.addEventListener('click', () => {
+                
+                if (CoverAction) {
+
+                    if (CoverAction.isRunning()) {
+                        CoverAction.stop();
+                    }
+
+                    CoverAction.reset();
+
+                    CoverAction.timeScale = 1;
+
+                    CoverAction.play();
+
+                    console.log("A tocar a animação da Cover!");
+
+                } else {
+                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
+                }
+            })
+        }
+
+const coverButtonOpen = document.getElementById('cover-open-btn');
+
+if (coverButtonOpen) {
+            coverButtonOpen.addEventListener('click', () => {
                 
                 if (CoverAction) {
 
