@@ -15,7 +15,7 @@ const clock = new THREE.Clock();
 const threeCanvas = document.getElementById('three-canvas');
 
 // Crie o renderer com antialias e pixel ratio do dispositivo para bordas mais nítidas
-let renderer = new THREE.WebGLRenderer({canvas: threeCanvas, antialias: true})
+let renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, antialias: true })
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
 renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight);
 renderer.setClearColor(0xffffff); // Cor de Fundo (Branco neste caso concreto)
@@ -77,8 +77,8 @@ new GLTFLoader().load(
         console.log("Animações encontradas no ficheiro:", gltf.animations);
 
         gltf.animations.forEach((clip, index) => {
-        console.log(`Animação #${index}: "${clip.name}"`);
-    });
+            console.log(`Animação #${index}: "${clip.name}"`);
+        });
 
         // Ativar sombras em todas as malhas do modelo carregado para que projetem e recebam sombras
         gltf.scene.traverse((obj) => {
@@ -87,7 +87,7 @@ new GLTFLoader().load(
                 obj.receiveShadow = true
                 // Garantir que o material seja atualizado se necessário
                 if (Array.isArray(obj.material)) {
-                    obj.material.forEach(m => { 
+                    obj.material.forEach(m => {
                         if (m) {
                             // Corrigir transparência para materiais que devem ser translúcidos
                             if (m.opacity < 1 || m.alphaMode === 'BLEND' || m.transmission > 0) {
@@ -122,25 +122,25 @@ new GLTFLoader().load(
             DiscRotation.play();
             console.log("✅ Animação do Disco carregada com sucesso.");
         } else {
-        console.error("❌ ERRO: Não encontrei 'DiscAction'. Vê os nomes na lista acima!");
-    }
-        
+            console.error("❌ ERRO: Não encontrei 'DiscAction'. Vê os nomes na lista acima!");
+        }
+
         if (armClip) {
             ArmAction = mixer.clipAction(armClip);
             ArmAction.loop = THREE.LoopOnce;
             ArmAction.clampWhenFinished = true;
             console.log("✅ Animação do Braço carregada com sucesso.");
         } else {
-        // TENTATIVA DE SALVAÇÃO: Se não encontrar 'ArmAction', tenta apanhar a segunda animação da lista
-        if (clips.length > 1) {
-            console.warn("⚠️ Aviso: Não encontrei 'ArmAction', vou tentar usar a segunda animação da lista.");
-            ArmAction = mixer.clipAction(clips[1]); // Assume que a segunda é a do braço
-            ArmAction.loop = THREE.LoopOnce;
-            ArmAction.clampWhenFinished = true;
-        } else {
-            console.error("❌ ERRO CRÍTICO: Não encontrei a animação do braço nem pelo nome, nem por posição.");
+            // TENTATIVA DE SALVAÇÃO: Se não encontrar 'ArmAction', tenta apanhar a segunda animação da lista
+            if (clips.length > 1) {
+                console.warn("⚠️ Aviso: Não encontrei 'ArmAction', vou tentar usar a segunda animação da lista.");
+                ArmAction = mixer.clipAction(clips[1]); // Assume que a segunda é a do braço
+                ArmAction.loop = THREE.LoopOnce;
+                ArmAction.clampWhenFinished = true;
+            } else {
+                console.error("❌ ERRO CRÍTICO: Não encontrei a animação do braço nem pelo nome, nem por posição.");
+            }
         }
-    }
 
         if (coverClip) {
             CoverAction = mixer.clipAction(coverClip);
@@ -151,7 +151,7 @@ new GLTFLoader().load(
             console.error("❌ ERRO CRÍTICO: Não encontrei a animação da Cover nem pelo nome, nem por posição.");
         }
 
-        
+
 
         // Calcular o centro da caixa delimitadora do modelo e recentralizar os controlos/câmara
         try {
@@ -208,148 +208,202 @@ new GLTFLoader().load(
 const discButtonStart = document.getElementById('disc-start-btn');
 
 if (discButtonStart) {
-            discButtonStart.addEventListener('click', () => {
-                
-                if (DiscRotation) {
+    discButtonStart.addEventListener('click', () => {
 
-                    if (DiscRotation.isRunning()) {
-                        DiscRotation.stop();
-                    }
+        if (DiscRotation) {
 
-                    DiscRotation.reset();
+            if (DiscRotation.isRunning()) {
+                DiscRotation.stop();
+            }
 
-                    DiscRotation.timeScale = 1;
+            DiscRotation.reset();
 
-                    DiscRotation.play();
+            DiscRotation.timeScale = 1;
 
-                    console.log("A tocar a animação do braço!");
+            DiscRotation.play();
 
-                } else {
-                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
-                }
-            })
+            console.log("A tocar a animação do braço!");
+
+        } else {
+            console.warn("Atenção: O modelo ou a animção ainda não carregam!");
         }
+    })
+}
 
 const discButtonStop = document.getElementById('disc-stop-btn');
 
 if (discButtonStop) {
-            discButtonStop.addEventListener('click', () => {
-                
-                if (DiscRotation) {
+    discButtonStop.addEventListener('click', () => {
 
-                    if (DiscRotation.isRunning()) {
-                        DiscRotation.stop();
-                    }
+        if (DiscRotation) {
 
-                    DiscRotation.reset();
+            if (DiscRotation.isRunning()) {
+                DiscRotation.stop();
+            }
 
-                    DiscRotation.timeScale = 1;
+            DiscRotation.reset();
 
-                    console.log("A tocar a animação do braço!");
+            DiscRotation.timeScale = 1;
 
-                } else {
-                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
-                }
-            })
+            console.log("A tocar a animação do braço!");
+
+        } else {
+            console.warn("Atenção: O modelo ou a animção ainda não carregam!");
         }
+    })
+}
 
 const armButtonStart = document.getElementById('arm-start-btn');
 
 if (armButtonStart) {
-            armButtonStart.addEventListener('click', () => {
-                
-                if (ArmAction) {
+    armButtonStart.addEventListener('click', () => {
 
-                    if (ArmAction.isRunning()) {
-                        ArmAction.stop();
-                    }
+        if (ArmAction) {
 
-                    ArmAction.reset();
+            if (ArmAction.isRunning()) {
+                ArmAction.stop();
+            }
 
-                    ArmAction.timeScale = 1;
+            ArmAction.reset();
 
-                    ArmAction.play();
+            ArmAction.timeScale = 1;
 
-                    console.log("A tocar a animação do braço!");
+            ArmAction.play();
 
-                } else {
-                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
-                }
-            })
+            console.log("A tocar a animação do braço!");
+
+        } else {
+            console.warn("Atenção: O modelo ou a animção ainda não carregam!");
         }
+    })
+}
 
 const armButtonStop = document.getElementById('arm-stop-btn');
 
 if (armButtonStop) {
-            armButtonStop.addEventListener('click', () => {
-                
-                if (ArmAction) {
+    armButtonStop.addEventListener('click', () => {
 
-                    if (ArmAction.time === 0) {
-                        ArmAction.time = ArmAction.getClip().duration;
-                    }
+        if (ArmAction) {
 
-                    ArmAction.paused = false;
-                    ArmAction.timeScale = -1;
-                    ArmAction.play();
-                    ArmAction.setLoop(THREE.LoopOnce);
-                    ArmAction.clampWhenFinished = true;
-                    ArmAction.play();
+            if (ArmAction.time === 0) {
+                ArmAction.time = ArmAction.getClip().duration;
+            }
 
-                    console.log("A tocar a animação do braço!");
+            ArmAction.paused = false;
+            ArmAction.timeScale = -1;
+            ArmAction.play();
+            ArmAction.setLoop(THREE.LoopOnce);
+            ArmAction.clampWhenFinished = true;
+            ArmAction.play();
 
-                } else {
-                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
-                }
-            })
+            console.log("A tocar a animação do braço!");
+
+        } else {
+            console.warn("Atenção: O modelo ou a animção ainda não carregam!");
         }
+    })
+}
 
 const coverButtonClose = document.getElementById('cover-close-btn');
 
 if (coverButtonClose) {
-            coverButtonClose.addEventListener('click', () => {
-                
-                if (CoverAction) {
+    coverButtonClose.addEventListener('click', () => {
 
-                    if (CoverAction.isRunning()) {
-                        CoverAction.stop();
-                    }
+        if (CoverAction) {
 
-                    CoverAction.reset();
+            if (CoverAction.isRunning()) {
+                CoverAction.stop();
+            }
 
-                    CoverAction.timeScale = 1;
+            CoverAction.reset();
 
-                    CoverAction.play();
+            CoverAction.timeScale = 1;
 
-                    console.log("A tocar a animação da Cover!");
+            CoverAction.play();
 
-                } else {
-                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
-                }
-            })
+            console.log("A tocar a animação da Cover!");
+
+        } else {
+            console.warn("Atenção: O modelo ou a animção ainda não carregam!");
         }
+    })
+}
 
 const coverButtonOpen = document.getElementById('cover-open-btn');
 
 if (coverButtonOpen) {
-            coverButtonOpen.addEventListener('click', () => {
-                
-                if (CoverAction) {
+    coverButtonOpen.addEventListener('click', () => {
 
-                    if (CoverAction.isRunning()) {
-                        CoverAction.stop();
-                    }
+        if (CoverAction) {
 
-                    CoverAction.reset();
+            if (CoverAction.time === 0) {
+                CoverAction.time = CoverAction.getClip().duration;
+            }
 
-                    CoverAction.timeScale = 1;
+            CoverAction.paused = false;
+            CoverAction.timeScale = -1;
+            CoverAction.play();
+            CoverAction.setLoop(THREE.LoopOnce);
+            CoverAction.clampWhenFinished = true;
+            CoverAction.play();
 
-                    CoverAction.play();
+            console.log("A tocar a animação da Cover!");
 
-                    console.log("A tocar a animação da Cover!");
-
-                } else {
-                    console.warn("Atenção: O modelo ou a animção ainda não carregam!");
-                }
-            })
+        } else {
+            console.warn("Atenção: O modelo ou a animção ainda não carregam!");
         }
+    })
+}
+
+// const nightButton = document.getElementById('light-btn');
+// let isNight = false;
+
+// if (nightButton) {
+//     nightButton.addEventListener('click', () => {
+
+//         isNight = !isNight;
+
+//         if (isNight) {
+//             // cena.background = new THREE.Color(0x111111);
+//             // ambientLight.intensity = 0.2;
+//             // directionalLight.intensity = 0.5;
+//             // directionalLight.color.setHex(0x3333ff);
+
+//             if (typeof cena !== 'undefined') cena.background = new THREE.Color(0x111111);
+
+//             // 2. Procura e ajusta as luzes AUTOMATICAMENTE na cena
+//             // (Assim não interessa o nome da variável!)
+//             if (typeof cena !== 'undefined') {
+//                 cena.traverse((object) => {
+//                     if (object.isAmbientLight) object.intensity = 0.2;
+//                     if (object.isDirectionalLight) {
+//                         object.intensity = 0.5;
+//                         object.color.setHex(0x3333ff); // Azul
+//                     }
+//                 });
+//             }
+
+
+//         }
+//     })
+// }
+
+// === DIAGNÓSTICO DO BOTÃO ===
+const testeBtn = document.getElementById('light-btn');
+console.log("1. TESTE: O botão existe?", testeBtn);
+
+if (testeBtn) {
+    testeBtn.addEventListener('click', () => {
+        console.log("2. TESTE: Clique detetado!");
+        
+        // Vamos tentar pintar o fundo de VERMELHO vivo só para ver se funciona
+        if (typeof cena !== 'undefined') {
+            console.log("3. TESTE: A mudar cor de fundo...");
+            cena.background = new THREE.Color(0xff0000); // Vermelho
+        } else {
+            console.log("3. ERRO: O código não encontra a variável 'cena'!");
+        }
+    });
+} else {
+    console.error("ERRO CRÍTICO: Não existe nenhum botão com id='light-btn' no HTML!");
+}
