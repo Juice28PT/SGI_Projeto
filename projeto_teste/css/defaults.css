@@ -687,4 +687,33 @@ ar-button > a:hover {
       display: block;
   }
 
-  
+  .theme-toggle-btn {
+    background-color: #e2e6ea; /* <--- O cinza mais escuro está aqui */
+    border: 1px solid #d1d9e0; /* Borda a condizer */
+    color: #343a40; /* Texto mais legível */
+    
+    border-radius: 30px !important;
+    padding: 6px 16px;
+    font-weight: 600; /* Um pouco mais "gordo" o texto */
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.theme-toggle-btn:hover {
+    background-color: #dbe0e5; /* Escurece ligeiramente ao passar o rato */
+    border-color: #c5ccd3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    color: #000;
+    cursor: pointer;
+}
+
+.theme-toggle-btn:active {
+    background-color: #c5ccd3;
+    transform: translateY(0px);
+    box-shadow: none;
+}
