@@ -75,6 +75,9 @@ window.addEventListener("resize", onWindowResize, { passive: true });
 // chame uma vez para definir o tamanho correto
 onWindowResize();
 
+let vidroLampadaMesh = null;
+let luzAmbienteCandeeiro = null;
+
 // Carregar modelo, ajustar luzes, e preparar cena exemplo
 new GLTFLoader().load(
   //Caminho do Modelo
@@ -123,6 +126,17 @@ new GLTFLoader().load(
           }
           obj.material.needsUpdate = true;
         }
+
+        if (obj.name === 'VidroLampada') {
+                    console.log("💡 Encontrei a lâmpada!");
+                    vidroLampadaMesh = obj;
+
+                    // Cria a luz real e cola-a à esfera
+                    luzAmbienteCandeeiro = new THREE.PointLight(0xffaa00, 0, 3); // Intensidade 0 (Apagada)
+                    luzAmbienteCandeeiro.position.set(0, 0, 0);
+                    obj.add(luzAmbienteCandeeiro);
+                }
+
       }
     });
 
